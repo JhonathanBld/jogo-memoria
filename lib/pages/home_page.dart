@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<GlobalKey<FlipCardState>> cardStateKeys = [];
+  List<GlobalKey<FlipCardState>> estadoCard = [];
   List<bool> cardsEscondidos = [];
   List<String> data = [];
   int cardAnterior = -1;
@@ -28,16 +28,14 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     for (var i = 0; i < widget.size; i++) {
-      cardStateKeys.add(GlobalKey<FlipCardState>());
+      estadoCard.add(GlobalKey<FlipCardState>());
       cardsEscondidos.add(true);
     }
     // Cria linhas com itens iguais, por isso dos dois fors
-    for (var i = 0; i < widget.size ~/ 2; i++) {
-      data.add(i.toString());
-    }
-    for (var i = 0; i < widget.size ~/ 2; i++) {
-      data.add(i.toString());
-    }
+
+    criaItems();
+    criaItems();
+    
     startTimer();
     // Embaralha todos os itens da lista
     data.shuffle();
@@ -50,6 +48,12 @@ class _HomeState extends State<Home> {
         tempo++;
       });
     });
+  }
+
+  criaItems() {
+      for (var i = 0; i < widget.size ~/ 2; i++) {
+      data.add(i.toString());
+    }
   }
 
   @override
@@ -81,7 +85,7 @@ class _HomeState extends State<Home> {
                       crossAxisCount: 4,
                     ),
                     itemBuilder: (context, index) => FlipCard(
-                      key: cardStateKeys[index],
+                      key: estadoCard[index],
                       onFlip: () {
                         if (!flip) {
                           flip = true;
@@ -99,7 +103,7 @@ class _HomeState extends State<Home> {
                               }
                             } else {
                               // Se não for a carta selecionada, gira a carta anterior
-                              cardStateKeys[cardAnterior]
+                              estadoCard[cardAnterior]
                                   .currentState
                                   .toggleCard();
                               cardAnterior = index;
